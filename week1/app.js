@@ -1,8 +1,10 @@
 function main() {
-    const HyfRepositoriesHttps = 'https://api.github.com/orgs/HackYourFuture/repos';
+    const HyfRepositoriesHttps = 'https://api.github.com/orgs/HackYourFuture/repos?per_page=100';
+
+    const HyfRepositoriesContributors = "https://developer.github.com/v3/repos/#list-contributors"
 
     getRepositories(HyfRepositoriesHttps, xhrCallback);
-    //createSelectElement();
+
 
     console.log('main!');
 
@@ -25,18 +27,36 @@ function showRepositoriesInSelect(repositories) {
     repositories.forEach(repository => {
         const optionElement = document.createElement('option');
         optionElement.setAttribute('value', repository.id);
-        optionElement.innerText= repository.name;
+        optionElement.innerText = repository.name;
 
         repositoriesSelectElement.appendChild(optionElement);
     });
 }
 
-function getSelectedRepository(repositoriesSelectElement){
-        const selectedRepository = repositories.filter(repository => {
-            return repository.id == Number.parseInt(repositoriesSelectElement.value);
-        })[0];
-        console.log('Selected repository', selectedRepository);
+function getSelectedRepository(repositoriesSelectElement) {
+    const selectedRepository = repositories.filter(repository => {
+        return repository.id == Number.parseInt(repositoriesSelectElement.value);
+    })[0];
+    console.log('Selected repository', selectedRepository);
+
+    const repoName = document.getElementById('repoName');
+    repoName.innerText = "Repository: " + selectedRepository.name;
+    const forks = document.getElementById('forks');
+    forks.innerText = "Forks: " + selectedRepository.forks;
+    const updated = document.getElementById('updated');
+    updated.innerText = "Updated: " + selectedRepository.updated_at;
+
+    //forEach(contributor_url, listItem){
+    const list = document.getElementById("contributorList")
+    const createListItem = document.createElement("li");
+    const contributorListItems = list.appendChild(createListItem);
+    contributorListItems.innerText = selectedRepository.contributors_url
+    //}
 }
+
+
+
+
 
 // Function that makes an server request (API call)
 function getRepositories(theUrl, callback) {
