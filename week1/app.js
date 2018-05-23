@@ -3,7 +3,7 @@ function main() {
     console.log('main!');
     var HyfContributorHttps = null;
 
-    getRepositories(HyfContributorHttps, xhrCallback);
+    getRepositories(HyfRepositoriesHttps, xhrCallback);
     console.log(HyfContributorHttps);
 }
 var repositories = [];
