@@ -1,28 +1,25 @@
 function main() {
     const HyfRepositoriesHttps = 'https://api.github.com/orgs/HackYourFuture/repos?per_page=100';
-    console.log('main!');
-    var HyfContributorHttps = null;
-
-    getRepositories(HyfRepositoriesHttps, xhrCallback);
-    console.log(HyfContributorHttps);
+    
+    getInfo(HyfRepositoriesHttps, xhrCallback); 
 }
+
 var repositories = [];
 var contributors = [];
 
-// Callback that handles response from server (when i get the data)
+// Callback that handles response from server (when i get the data, parse it)
 function xhrCallback(data) {
-    //console.log('data from server', data);
     repositories = JSON.parse(data);
     console.log('parsed repository data:', repositories);
 
     showRepositoriesInSelect(repositories);
 }
+
 function xhrCallbackContributors(data) {
-    //console.log('data from server', data); THIS WORKS!!
     contributors = JSON.parse(data);
     console.log('parsed contributor data:', contributors);
 
-    showContributors(contributors);
+    createListItemForEachContributor(contributors);
 }
 
 function showRepositoriesInSelect(repositories) {
@@ -38,22 +35,24 @@ function showRepositoriesInSelect(repositories) {
     });
 }
 
-function showContributors(contributors) {
-    // const repositoriesSelectElement = document.querySelector('#repositories');
-    // repositoriesSelectElement.setAttribute('onchange', "showContributors(contributors)");
+function createListItemForEachContributor(contributors) {
+    const list = document.getElementById("contributorList")
+    
+    while( list.hasChildNodes()){
+        list.removeChild(list.firstChild);
+    }
 
     contributors.forEach(contributor => {
-        const list = document.getElementById("contributorList")
+    
         const createListItem = document.createElement("li");
         const contributorListItems = list.appendChild(createListItem);
-        contributorListItems.innerText = contributor.login;
-
-        const listOfContributions = document.getElementById("numberOfContributions");
-        const createContributionItem = document.createElement("li");
-        const contributionItems = listOfContributions.appendChild(createContributionItem);
-        contributionItems.innerText = contributor.contributions;
+        contributorListItems.innerHTML = `<img width="100px" src="${contributor.avatar_url}"> 
+                                            <span class="name">Name: ${contributor.login}</span> 
+                                            <span class="cont">Contributions: ${contributor.contributions}</span>`;
 
         console.log(contributor);
+
+        //create function to replace each list item with every selected repository
     })
 }
 
@@ -65,9 +64,9 @@ function getSelectedRepository(repositoriesSelectElement) {
 
     showAdditionalInfo(selectedRepository);
 
-    //showContributors(contributors); //showContributorsInDIV
+    getSelectedRepositoryContributors(selectedRepository); //nested it here instead of onchange 
 
-    getSelectedRepositoryContributors(selectedRepository);
+    createListItemForEachContributor(contributors);
 }
 
 function showAdditionalInfo(selectedRepository) {
@@ -80,13 +79,13 @@ function showAdditionalInfo(selectedRepository) {
 }
 
 function getSelectedRepositoryContributors(selectedRepository) {
-    HyfContributorHttps = selectedRepository.contributors_url;
-    console.log(HyfContributorHttps);
-    getContributors(HyfContributorHttps, xhrCallbackContributors)
+    var hyfContributorHttps = selectedRepository.contributors_url;          //WHERE THE MAGIC HAPPENS!
+    console.log(hyfContributorHttps);
+    getInfo(hyfContributorHttps, xhrCallbackContributors)
 }
 
 // Function that makes an server request (API call)
-function getRepositories(theUrl, callback) {
+function getInfo(theUrl, callback) {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function () {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
@@ -95,14 +94,3 @@ function getRepositories(theUrl, callback) {
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
 }
-
-// Function that makes an server request (API call)
-function getContributors(theUrl, callback) {
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function () {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
-    }
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous 
-    xmlHttp.send(null);
-} 
