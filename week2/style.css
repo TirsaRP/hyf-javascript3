@@ -1,0 +1,35 @@
+.header{
+    font-size: 2em;
+    background-color: rgb(42, 126, 126); 
+    padding:1% 2%;
+}
+#repositories{
+    height:2.5em;
+    width:40%;
+    font-size:1em;
+}
+.body{
+    background-color:rgb(142, 198, 235);
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows:1fr;
+    grid-gap:2%;
+}
+.repo{
+    background-color:whitesmoke;
+    font-size:1em;
+    padding-left:6%;
+}
+.contributors{
+    font-size:1em;
+
+}
+ul {
+    list-style-type: none;   
+}
+#contributorList{
+    padding-left: 4%;
+}
+.cont{
+    padding-left:4%;   
+}
