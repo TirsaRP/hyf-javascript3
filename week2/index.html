@@ -12,10 +12,15 @@
     <div id="root">
         <div class="header">
             <label for="repositories">HYF Repositories</label>
-            <select id="repositories"></select>
+            <select id="repositories">
+                    <option selected>Choose a Repository</option>
+            </select>
         </div>
 
         <div class="body">
+                <div id="modal">
+                        <img id="loader" src="https://media.giphy.com/media/jAYUbVXgESSti/giphy.gif" />
+                </div>
             <div class="repo">
                 <p id="repoName"></p>
                 <p id="forks"></p>

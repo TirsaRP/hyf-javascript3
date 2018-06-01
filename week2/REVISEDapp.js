@@ -1,9 +1,13 @@
 function main() {
+    openModal()
     fetch('https://api.github.com/orgs/HackYourFuture/repos?per_page=100')
-        //.then(status())
         .then((response) => response.json())
-        .then((repositories) => showRepositoriesInSelect(repositories))
-        .catch((error) => console.log("Request failed", error));
+        .then(function (data) {
+            repositories = data;
+            showRepositoriesInSelect(repositories);
+            closeModal()
+        })
+        .catch((error) => console.log("Repositories Request failed", error));
 }
 
 var repositories = [];
@@ -11,7 +15,7 @@ var contributors = [];
 
 function showRepositoriesInSelect(repositories) {
     const repositoriesSelectElement = document.querySelector('#repositories');
-    repositoriesSelectElement.setAttribute('onchange', "getSelectedRepository(this)");
+    repositoriesSelectElement.setAttribute('onchange', "getSelectedRepository(this)", true);    //{passive: true} violation in console.log
 
     repositories.forEach(repository => {
         const optionElement = document.createElement('option');
@@ -43,12 +47,16 @@ function showAdditionalInfo(selectedRepository) {
 }
 
 function getSelectedRepositoryContributors(selectedRepository) {
-    var hyfContributorHttps = selectedRepository.contributors_url;          //WHERE THE MAGIC HAPPENS!
-    console.log(hyfContributorHttps);
+    openModal();
+    var hyfContributorHttps = selectedRepository.contributors_url;
 
     fetch(hyfContributorHttps)
         .then((response) => response.json())
-        .then((contributors) => createListItemForEachContributor(contributors))
+        .then(function (data) {
+            contributors = data;
+            createListItemForEachContributor(contributors)
+            closeModal()
+        })
         .catch((error) => console.log("Contributor Request Failed", error))
 }
 
@@ -66,16 +74,34 @@ function createListItemForEachContributor(contributors) {
         contributorListItems.innerHTML = `<img width="100px" src="${contributor.avatar_url}"> 
                                             <span class="name">Name: ${contributor.login}</span> 
                                             <span class="cont">Contributions: ${contributor.contributions}</span>`;
-
-        console.log(contributor);
-
     })
+}
+
+function openModal() {
+    document.getElementById('modal').style.display = 'block';
+}
+
+function closeModal() {
+document.getElementById('modal').style.display = 'none';
 }
 
 
 
 /*
-// Function that makes an server request (API call) using Promise //  BUT IS IT STILL A HTTPREQUEST?
+////////////////// QUESTION TO ASK IN CLASS ////////////
+function getSelectedRepositoryContributors(selectedRepository) {
+    var hyfContributorHttps = selectedRepository.contributors_url;    
+
+    fetch(hyfContributorHttps)
+        .then((response) => response.json())
+        .then((contributors) => createListItemForEachContributor(contributors))  //WHY DOES THIS WORK HERE BUT NOT WITH REPOSITORIES?
+        .catch((error) => console.log("Contributor Request Failed", error))
+} */
+
+
+
+/*
+// Function that makes an server request (API call) using Promise //  BUT  IT IS STILL A XMLHTTPREQUEST
 function getInfo(theUrl, callback) {
     return new Promise((resolve, reject)=> {
         var xmlHttp = new XMLHttpRequest();
@@ -86,10 +112,6 @@ function getInfo(theUrl, callback) {
     });
 }
 */
-
-
-
-
 
 
 /* ///////// another XMLHttp Request example ////////
