@@ -71,7 +71,7 @@ function createListItemForEachContributor(contributors) {
 
         const createListItem = document.createElement("li");
         const contributorListItems = list.appendChild(createListItem);
-        contributorListItems.innerHTML = `<img width="100px" src="${contributor.avatar_url}"> 
+        contributorListItems.innerHTML = `<img width="100px" src="${contributor.avatar_url}" alt="contributor image"> 
                                             <span class="name">Name: ${contributor.login}</span> 
                                             <span class="cont">Contributions: ${contributor.contributions}</span>`;
     })
