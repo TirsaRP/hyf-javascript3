@@ -1,0 +1,73 @@
+.header{
+    font-size: 2em;
+    background-color: rgba(199, 17, 56, 0.897); 
+    padding:1% 2%;
+}
+#repositories{
+    height:2.5em;
+    width:40%;
+    font-size:1em;
+}
+.body{
+    background-color:rgba(233, 149, 149, 0.719);
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows:1fr;
+    grid-gap:2%;
+}
+.repo{
+    background-color:rgb(238, 177, 127);
+    font-size:1em;
+    padding-left:6%;
+}
+.contributors{
+    font-size:1em;
+
+}
+ul {
+    list-style-type: none;   
+}
+#contributorList{
+    padding-left: 4%;
+}
+.cont{
+    padding-left:4%;   
+}
+
+
+#modal {
+    display: none;
+    position: absolute;
+    top: 30%;
+    left: 40%;
+    width: 200px;
+    height: 200px;
+    padding:10% 10%;
+    border: 3px solid #ababab;
+    box-shadow:1px 1px 10px #ababab;
+    border-radius:20px;
+    background-color: white;
+    z-index: 1002;
+    text-align:center;
+    overflow: auto;
+}
+#loader{
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px; 
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}
+    
+    /* Safari */
+    @-webkit-keyframes spin {
+      0% { -webkit-transform: rotate(0deg); }
+      100% { -webkit-transform: rotate(360deg); }
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
