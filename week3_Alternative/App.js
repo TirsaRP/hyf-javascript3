@@ -17,7 +17,7 @@ class App {
      */
     async initialize(url) {
         try {
-            const repositories = await Util.fetchJSON(url);  //repos= JSON object?
+            repositories = await Util.fetchJSON(url);  //repos= JSON object?
             this.repositories = repositories.map(repo => new Repository(repo));     // this.repos = repo array?
 
             this.render(repositories);   // I CHANGED this.repositories.render() to this.render()
@@ -45,7 +45,7 @@ class App {
 
             repositoriesSelectElement.appendChild(optionElement);
         });
-        if (this.selectedRepository) {
+        if (this.selectedRepository) {          //if a repo is selected, render .repo with additional info
             this.selectedRepository.render(document.querySelector('.repo'))
         }
     }
@@ -59,22 +59,22 @@ class App {
         const displayRepository = new Repository(selectedRepository);
         displayRepository.showAdditionalInfo(selectedRepository);
 
-        this.getSelectedRepositoryContributors(selectedRepository); //nested it here instead of onchange 
+        this.getSelectedRepositoryContributors(selectedRepository);
 
         //this.createListItemForEachContributor(contributors);
     }
 
-    getSelectedRepositoryContributors(selectedRepository) {
-        openModal();
+    async  getSelectedRepositoryContributors(selectedRepository) {
+        //openModal();
         let hyfContributorHttps = selectedRepository.contributors_url;
 
         try {
-            contributors = await Util.fetchJSON(hyfContributorHttps);  //repos= JSON object?
-            this.contributors = contributors.map(contributor => new Contributor(contributor));     // this.repos = repo array?
+            contributors = await Util.fetchJSON(hyfContributorHttps);
+            this.contributors = contributors.map(contributor => new Contributor(contributor));
 
-            this.render(contributors);   // I CHANGED this.repositories.render() to this.render()
-            createListItemForEachContributor(contributors)
-            closeModal()
+            render(contributorList);   // OR...   Contributor.render(contributors)?
+            //createListItemForEachContributor(contributors)
+            //closeModal()
         } catch (error) {
             this.renderError(error);
         }
@@ -92,7 +92,7 @@ class App {
     }
 
 
-function createAndAppend(name, parent, options = {}) {          //MOVED FROM INDEX.JS
+/*function createAndAppend(name, parent, options = {}) {          //MOVED FROM INDEX.JS
     const elem = document.createElement(name);
     parent.appendChild(elem);
     Object.keys(options).forEach((key) => {
@@ -104,7 +104,7 @@ function createAndAppend(name, parent, options = {}) {          //MOVED FROM IND
         }
     });
     return elem;
-}
+}*/
 
 function fetchJSON(url, cb) {       //MOVED HERE FROM INDEX.JS
     const xhr = new XMLHttpRequest();
@@ -120,14 +120,13 @@ function fetchJSON(url, cb) {       //MOVED HERE FROM INDEX.JS
     xhr.onerror = () => cb(new Error('Network request failed'));
     xhr.send();
 }
-
 function main(url) {          //MOVED HERE FROM INDEX.JS
     fetchJSON(url, (err, data) => {
-        const root = document.getElementById('root');
+        const root = document.getElementById('root')
         if (err) {
-            createAndAppend('div', root, { html: err.message, class: 'alert-error' });
+            createAndAppend('div', root, { html: err.message, class: 'alert-error' })
         } else {
-            createAndAppend('pre', root, { html: JSON.stringify(data, null, 2) });
+            createAndAppend('pre', root, { html: JSON.stringify(data, null, 2) })
         }
     });
 }

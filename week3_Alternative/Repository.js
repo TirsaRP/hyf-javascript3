@@ -24,20 +24,22 @@ class Repository {
         const updated = document.getElementById('updated');
         updated.innerText = "Updated: " + selectedRepository.updated_at;
     }
-    ////// SIMON'S EXAMPLE.  Util.createAndAppend('div', parent, {html: 'hej'})
+  
 
 }
 
 /**
  * Returns an array of contributors as a promise
  */
-fetchContributors() {
-    return Util.fetchJSON(this.data.contributors_url);
-}
+//fetchContributors() {
+  //  return Util.fetchJSON(this.data.contributors_url);
+//}
 
 /**
  * Returns the name of the repository
  */
-name() {
-    return this.data.name;
-}
+//name() {
+   // return this.data.name;
+//}
+
+
