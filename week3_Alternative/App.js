@@ -17,11 +17,10 @@ class App {
      */
     async initialize(url) {
         try {
-            repositories = await Util.fetchJSON(url);  //repos= JSON object?
-            this.repositories = repositories.map(repo => new Repository(repo));     // this.repos = repo array?
-
-            this.render(repositories);   // I CHANGED this.repositories.render() to this.render()
-
+            const response = await fetch(url)
+            const data = await response.json()
+            repositories = data;
+            this.render();
         } catch (error) {
             this.renderError(error);
         }
@@ -51,9 +50,9 @@ class App {
     }
     getSelectedRepository(event) {
         const repositoriesSelectElement = event.target;
-        const selectedRepository = repositories.filter(repository => {
+        const selectedRepository = repositories.find(repository => {
             return repository.id == Number.parseInt(repositoriesSelectElement.value);
-        })[0];
+        });
         console.log('Selected repository', selectedRepository);
 
         const displayRepository = new Repository(selectedRepository);
@@ -69,10 +68,10 @@ class App {
         let hyfContributorHttps = selectedRepository.contributors_url;
 
         try {
-            contributors = await Util.fetchJSON(hyfContributorHttps);
-            this.contributors = contributors.map(contributor => new Contributor(contributor));
-
-            render(contributorList);   // OR...   Contributor.render(contributors)?
+            let response = await fetch(hyfContributorHttps)
+            let data = await response.json()
+            contributors = data
+            
             //createListItemForEachContributor(contributors)
             //closeModal()
         } catch (error) {
@@ -104,7 +103,7 @@ class App {
         }
     });
     return elem;
-}*/
+}
 
 function fetchJSON(url, cb) {       //MOVED HERE FROM INDEX.JS
     const xhr = new XMLHttpRequest();
@@ -129,7 +128,7 @@ function main(url) {          //MOVED HERE FROM INDEX.JS
             createAndAppend('pre', root, { html: JSON.stringify(data, null, 2) })
         }
     });
-}
+}*/
 
 function openModal() {
     document.getElementById('modal').style.display = 'block';
